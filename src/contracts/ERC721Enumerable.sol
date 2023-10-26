@@ -1,8 +1,9 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 import "./ERC721.sol";
+import "../interfaces/IERC721Enumerable.sol";
 
-contract ERC721Enumerable is ERC721 {
+contract ERC721Enumerable is ERC721, IERC721Enumerable {
     uint256[] private _allTokens;
     mapping(uint256 => uint256) private _allTokensIndex;
     mapping(address => uint256[]) private _ownedTokens;
@@ -24,7 +25,9 @@ contract ERC721Enumerable is ERC721 {
         _ownedTokens[to].push(tokenId);
     }
 
-    function tokenByIndex(uint256 index) public view returns (uint256) {
+    function tokenByIndex(
+        uint256 index
+    ) public view override returns (uint256) {
         require(index < totalSupply(), "Global index out of range");
         return _allTokens[index];
     }
@@ -32,13 +35,13 @@ contract ERC721Enumerable is ERC721 {
     function tokenOfOwnerByIndex(
         address _owner,
         uint256 _index
-    ) public view returns (uint256) {
+    ) public view override returns (uint256) {
         require(_index < balanceOf(_owner), "Owner index out of range");
 
         return _ownedTokens[_owner][_index];
     }
 
-    function totalSupply() public view returns (uint256) {
+    function totalSupply() public view override returns (uint256) {
         return _allTokens.length;
     }
 }
